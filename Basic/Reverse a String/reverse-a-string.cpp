@@ -12,13 +12,17 @@ using namespace std;
 class Solution
 {
     public:
-  string reverseWord(string str)
+    string reverseWord(string str)
     {
-        string ans="";
-        for (int i=str.length()-1;i>=0;i--){
-            ans.push_back(str[i]);
-        }
-        return ans;
+       int len = str.length();
+    int n = len-1;
+    int i = 0;
+    while(i<=n){
+        swap(str[i],str[n]);
+        n = n-1;
+        i = i+1;
+  }
+  return str;
     }
 };
 
