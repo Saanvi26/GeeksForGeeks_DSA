@@ -22,7 +22,7 @@ class Solution{
         if(arr[0]<=sum){
             int a=helper(arr+1,n-1,sum-arr[0],dp);
             int b=helper(arr+1,n-1,sum,dp);
-            return dp[n][sum]=(a+b)%1000000007;
+            return dp[n][sum]=(a || b)%1000000007;
         }
          return dp[n][sum]=helper(arr+1,n-1,sum,dp)%1000000007;
     }
@@ -34,9 +34,7 @@ public:
           for (int i=0;i<arr.size();i++){
               a[i]=arr[i];
           }
-          if(helper(a,arr.size(),sum,dp)){
-              return true;
-          }
+          return (helper(a,arr.size(),sum,dp));
           return false;
     }
 };
