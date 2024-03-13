@@ -6,32 +6,24 @@ using namespace std;
 // } Driver Code Ends
 class Solution
 {
-    //1 2 3             4<=4           
-    //4 5 1.   W=4.     dp[0]=max(1,
-//dp -1 -1 -1 -1        
-    private :
-    int helper(int W, int wt[], int val[], int n,vector<vector<int>>&dp,int idx){
+    private:
+     int kps(int W, int wt[], int val[], int n,vector<vector<int>>&dp){
        if(n==0 || W==0){
-          return 0;
-      }
-      if(dp[n][W]!=-1){
-          return dp[n][W];
-      }
-      if(wt[0]<=W){
-      dp[n][W]=max(val[0]+helper(W-wt[0],wt+1,val+1,n-1,dp,idx+1),helper(W,wt+1,val+1,n-1,dp,idx+1));
-      return dp[n][W];
-      }
-      else{
-      dp[n][W]=helper(W,wt+1,val+1,n-1,dp,idx+1);
-      return dp[n][W];
-      }
-    }
+           return 0;
+       }
+       if(dp[n][W]!=-1){
+           return dp[n][W];
+       }
+       if(wt[n-1]<=W){
+          return dp[n][W]=max(kps(W,wt,val,n-1,dp),val[n-1]+kps(W-wt[n-1],wt,val,n-1,dp));
+       }
+       return dp[n][W]=kps(W,wt,val,n-1,dp);
+     }
     public:
-    //Function to return max value that can be put in knapsack of capacity W.
     int knapSack(int W, int wt[], int val[], int n) 
     { 
-     vector<vector<int>>dp(n+1, vector<int>(W+1, -1));
-     return helper(W,wt,val,n,dp,0);
+         vector<vector<int>> dp(n+1, vector<int>(W+1, -1));
+        return kps(W,wt,val,n,dp);
     }
 };
 
