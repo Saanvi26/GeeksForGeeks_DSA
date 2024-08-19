@@ -9,19 +9,27 @@ using namespace std;
 
 class Solution{   
 public:
-    bool check(vector<int>arr,int sum,int index,vector<vector<int>> &dp){
-           if(sum==0) return dp[index][sum]=true;
-        if(index>=arr.size() && sum!=0) return dp[index][sum]=false;
-        if(dp[index][sum]!=-1) return dp[index][sum];
-        
-        if(arr[index]<=sum){
-            return dp[index][sum]=(check(arr,sum-arr[index],index+1,dp)) | (check(arr,sum,index+1,dp));
-        }
-        return dp[index][sum]=check(arr,sum,index+1,dp);
-    }
     bool isSubsetSum(vector<int>arr, int sum){
-        vector<vector<int>> dp(arr.size() + 1, vector<int>(sum + 1, -1));
-        return check(arr,sum,0,dp);
+        int n=arr.size();
+        vector<vector<int>>dp(n,vector<int>(sum+1,0));
+        for(int i=0;i<n;i++){
+            dp[i][0]=1;
+        }
+        if (arr[0] <= sum) {
+        dp[0][arr[0]] = 1;
+    }
+        for(int indx=1;indx<n;indx++){
+            for(int target=1;target<=sum;target++){
+                int notTake=dp[indx-1][target];
+                int take=0;
+                if(arr[indx]<=target){ 
+                    take=dp[indx-1][target-arr[indx]];
+                }
+                
+                dp[indx][target]=take || notTake;
+            }
+        }
+        return dp[n-1][sum];
     }
 };
 
