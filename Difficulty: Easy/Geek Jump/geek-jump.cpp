@@ -6,18 +6,19 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
   public:
-  int helper(int indx,vector<int>&height,vector<int>&dp){
-      if(indx==0) return 0;
-      if(dp[indx]!=-1) return dp[indx];
-      int right=INT_MAX;
-      int left=abs(height[indx]-height[indx-1])+helper(indx-1,height,dp);
-      if(indx>1)
-      right=abs(height[indx]-height[indx-2])+helper(indx-2,height,dp);
-      return dp[indx]=min(left,right);
-  }
+    int helper(vector<int>& height, int n,int index,vector<int>&dp){
+        if(index>=(n-1)) return 0;
+        if(dp[index]!=-1) return dp[index];
+        int one=abs(height[index]-height[index+1])+helper(height,n,index+1,dp);
+        int two=INT_MAX;
+        if(index+2<n)
+        two=abs(height[index]-height[index+2])+helper(height,n,index+2,dp);
+        return dp[index]=min(one,two);
+    }
     int minimumEnergy(vector<int>& height, int n) {
+        int index=0;
         vector<int>dp(n+1,-1);
-        return helper(n-1,height,dp);
+        return helper(height,n,index,dp);
     }
 };
 
