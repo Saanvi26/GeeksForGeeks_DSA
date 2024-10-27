@@ -6,32 +6,25 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
   public:
-  bool bfs(vector<bool>&visited,int i,vector<vector<int>> &adj){
-       queue<pair<int,int>>q;
-        q.push({i,-1});
-        visited[i]=true;
-        while(!q.empty()){
-            int indx=q.front().first;
-            int parent=q.front().second;
-            q.pop();
-            for(auto k:adj[indx]){
-                if(!visited[k]){
-                q.push({k,indx});
-                visited[k]=true;
-                }
-                else if(visited[k] && parent!=k){
+    bool dfs(int node,int parent,vector<vector<int>>&adj,vector<bool>&visited){
+        visited[node]=true;
+        for(auto i :adj[node]){
+            if(!visited[i]){
+                if(dfs(i,node,adj,visited)){
                     return true;
                 }
             }
+            else if (i!=parent){
+                return true;
+            }
         }
         return false;
-  }
-    // Function to detect cycle in an undirected graph.
+    }
     bool isCycle(vector<vector<int>> adj) {
         vector<bool>visited(adj.size(),false);
         for(int i=0;i<adj.size();i++){
             if(!visited[i]){
-                if( bfs(visited,i,adj))
+                if(dfs(i,-1,adj,visited))
                 return true;
             }
         }
