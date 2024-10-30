@@ -7,29 +7,37 @@ using namespace std;
 class Solution {
   public:
     // Function to return list containing vertices in Topological order.
-    void dfs(int node,vector<vector<int>>& adj,vector<bool>&visited,stack<int>&stk){
-        visited[node]=true;
-        for(auto i : adj[node]){
-            if(!visited[i]){
-                dfs(i,adj,visited,stk);
-            }
-        }
-        stk.push(node);
-    }
     vector<int> topologicalSort(vector<vector<int>>& adj) {
-        vector<int>ans;
-        stack<int>stk;
-        vector<bool>visited(adj.size(),false);
+        vector<int>inorder(adj.size(),0);
+        
         for(int i=0;i<adj.size();i++){
-            if(!visited[i]){
-                dfs(i,adj,visited,stk);
+        for(int j=0;j<adj[i].size();j++){
+            inorder[adj[i][j]]++;
+        }    
+        }
+        queue<int>q;
+        vector<int>ans;
+        for(int i=0;i<inorder.size();i++){
+            if(inorder[i]==0){
+                q.push(i); // made an error here 
             }
         }
-        while(!stk.empty()){
-            ans.push_back(stk.top());
-            stk.pop();
+        while(!q.empty()){
+            int node=q.front();
+            q.pop();
+             ans.push_back(node);
+            for(auto i :adj[node]){
+                inorder[i]--;
+                if(inorder[i]==0){
+                q.push(i);
+            }
+            }
         }
+         if (ans.size() != adj.size()) {
+        return {};  // If not all nodes are included, a cycle exists, so return an empty vector.
+    }
         return ans;
+        
     }
 };
 
