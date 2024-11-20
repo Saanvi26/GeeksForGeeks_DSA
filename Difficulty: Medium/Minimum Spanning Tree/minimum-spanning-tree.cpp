@@ -6,34 +6,51 @@ using namespace std;
 class Solution
 {
 	public:
-	//Function to find sum of weights of edges of the Minimum Spanning Tree.
+	int findParent(int u,vector<int>&parent){
+	 if(parent[u]==u) return u;
+	 return parent[u]=findParent(parent[u],parent);
+	}
+	void union_size(int u,int v,vector<int>&size,vector<int>&parent){
+	    int pu=findParent(u,parent);
+	    int pv=findParent(v,parent);
+	    if(pu==pv) return ;
+	    if(size[pu]<size[pv]){
+	        parent[pu]=pv;
+	        size[pv]+=size[pu];
+        }
+	    else{
+	        parent[pv]=pu;
+	        size[pu]+=size[pv];
+	    }
+	}
     int spanningTree(int V, vector<vector<int>> adj[])
     {
-        vector<bool>visited(V,false);
-        priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>,greater<pair<int,pair<int,int>>>>pq;
-        vector<pair<int,int>>mst;
-        pq.push({0,{0,-1}});
-        int sum=0;
-        while(!pq.empty()){
-            int dis=pq.top().first;
-            int node=pq.top().second.first;
-            int parent=pq.top().second.second;
-            if(!visited[node]){
-                sum+=dis;
-            }
-            visited[node]=true;
-            if(parent!=-1){
-                mst.push_back({parent,node});
-            }
-            pq.pop();
-            for(auto i : adj[node]){
-                if(!visited[i[0]]){
-                    pq.push({i[1],{i[0],node}});
-                }
-            }
-        }
-        return sum;
-        
+       priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>,greater<pair<int,pair<int,int>>>>pq;
+       	vector<int>size(V,1);
+       	vector<int>parent(V,0);
+       	for(int i=0;i<V;i++){
+       	    parent[i]=i;
+       	}
+       	for (int i = 0; i < V; i++) {
+    for (auto &edge : adj[i]) {
+        pq.push({edge[1], {i, edge[0]}});
+    }
+}
+
+       	int s=0;
+       	while(!pq.empty()){
+       	    int d=pq.top().first;
+       	    int u=pq.top().second.first;
+       	    int v=pq.top().second.second;
+       	    if(findParent(u,parent)!=findParent(v,parent)){
+       	        s+=d;
+       	        union_size(u,v,size,parent);
+       	    }
+       	    pq.pop();
+       	    
+       	}
+       	return s;
+       	
     }
 };
 
